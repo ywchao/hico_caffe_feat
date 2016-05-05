@@ -1,0 +1,9 @@
+# hico dataset
+external/hico_20150920
+
+# binary files
+*.pyc
+
+# zip files
+*.tar.gz
+*.tgz
