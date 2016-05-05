@@ -5,7 +5,7 @@ config;
 %   'imagenet' is the default. You can select another feature type by
 %   uncommenting the line.
 
-feat_type = 'imagenet';
+% feat_type = 'imagenet';
 % feat_type = 'ft_verb';
 % feat_type = 'ft_object';
 % feat_type = 'ft_action';
