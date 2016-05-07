@@ -12,7 +12,7 @@ config;
 
 % set feature directory
 % feat_dir = [base_dir './data/precomputed_dnn_features/' feat_type '/'];
-feat_dir = [base_dir '../outputs/' strrep(feat_type ,'-','/') '/'];
+feat_dir = [base_dir '../output/' strrep(feat_type ,'-','/') '/'];
 
 % get mean norm on trraining set
 mean_norm_base = [base_dir 'caches/mean_norm/'];
