@@ -1,0 +1,16 @@
+net: "models/bvlc_reference_caffenet/train_val_ft_verb_single.prototxt"
+test_iter: 1406
+test_interval: 1000
+base_lr: 0.001
+lr_policy: "step"
+gamma: 0.1
+stepsize: 20000
+display: 20
+max_iter: 50000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 50000
+snapshot_prefix: "output/ft_caffenet/ft_verb_single/caffenet"
+solver_mode: GPU
+# For reproducibility
+random_seed: 3
