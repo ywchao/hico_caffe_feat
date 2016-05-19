@@ -1,6 +1,11 @@
 
 config;
 
+% set label type
+
+% label_type  = 'sep_vb';
+% label_type  = 'sep_nn';
+
 % set feature type
 %   'imagenet' is the default. You can select another feature type by
 %   uncommenting the line.
@@ -38,27 +43,32 @@ else
     poolobj = parpool(poolsize);
 end
 
-% support Parallelization by batching HOI classes
+% support Parallelization by batching VB/NN classes
 num_batch = 1;
 batch_id  = 1;
 
-anno      = load(anno_file);
-len       = numel(anno.list_action);
+anno_sep = load(anno_sep_file);
+switch label_type
+    case 'sep_vb'
+        len = length(anno_sep.anno_vb.list);
+    case 'sep_nn'
+        len = length(anno_sep.anno_nn.list);
+end
 interval  = round(len / num_batch);
 ss        = 1:interval:len;
 sid       = ss(1:num_batch);
 eid       = [ss(2:num_batch)-1 len];
 
 % start svm training and prediction
-fprintf('start training vo classifier ... \n');
+fprintf('start training %s classifier ... \n',label_type);
 fprintf('feat_type: %s\n',feat_type);
 fprintf('num_batch: %03d\n',num_batch);
 fprintf('batch_id:  %03d\n',batch_id);
 fprintf('num_class: %03d\n\n',eid(batch_id)-sid(batch_id)+1);
 
-parallel_train(sid(batch_id), eid(batch_id), 'vo', feat_type, feat_dir);
+parallel_train(sid(batch_id), eid(batch_id), label_type, feat_type, feat_dir);
 
-fprintf('\ndone training vo classifiers.\n\n');
+fprintf('\ndone training %s classifiers.\n\n',label_type);
 
 % delete parpool
 delete(poolobj);

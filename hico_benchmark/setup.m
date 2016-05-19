@@ -7,6 +7,12 @@ addPaths;
 % generate anno_iccv.mat
 generate_anno_iccv;
 
+% generate anno_iccv_sep.mat
+generate_anno_sep_iccv;
+
+% generate coocc.mat
+generate_coocc;
+
 % download liblinear
 if ~exist('./3rd_party/liblinear-1.96','dir')
     fprintf('downloading liblinear ... \n');

@@ -21,7 +21,7 @@ label_value(label_value == -2) = -1;
 
 % get feature files
 images_name = anno.list_train(indexes);
-fprintf('train on %d images, action : %d\n', length(images_name), action_index);
+fprintf('train on %d images, class : %d\n', length(images_name), action_index);
 feature_list = cellfun(@(x)strrep(x,'.jpg','.mat'), images_name, 'UniformOutput', false);
 
 % load feature size

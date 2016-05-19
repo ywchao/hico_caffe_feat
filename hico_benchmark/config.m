@@ -16,7 +16,8 @@ im_dir = [base_dir './external/hico_20150920/images/'];
 %   See data/generate_anno_iccv.m for more details.
 %
 anno_file     = [base_dir './data/hico_anno/anno_iccv.mat'];
-anno_sep_file = [base_dir './data/hico_anno/anno_sep.mat'];  
+anno_sep_file = [base_dir './data/hico_anno/anno_sep.mat'];
+coocc_file    = [base_dir './data/hico_coocc/coocc.mat'];
 
 % The MATLAB code will use parfor for training HOI classifiers. Uncomment the
 % following line and set the poolsize according to your need. Leave the line

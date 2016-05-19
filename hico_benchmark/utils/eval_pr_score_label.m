@@ -1,4 +1,4 @@
-function [ rec, prec, ap ] = eval_pr_score_label( score, label, npos, draw )
+function [ rec, prec, ap ] = eval_pr_score_label( score, label, npos, draw, check )
 % input
 %   score:  [N x 1]     Classification score. N is the number of data (VN pair)
 %   label:  [N x 1]     Ground-truth labels of the data; should be a vector of 1s and -1s
@@ -11,9 +11,15 @@ if nargin < 4
     draw = false;
 end
 
+if nargin < 5
+    check = true;
+end
 
-ulabel = unique(label);
-assert(numel(ulabel) == 2 && (ulabel(1) == -1) && (ulabel(2) == 1));
+% skip this to speed up function evaluation
+if check
+    ulabel = unique(label);
+    assert(numel(ulabel) == 2 && (ulabel(1) == -1) && (ulabel(2) == 1));
+end
 
 % sort classifcation by decreasing score
 [~,si]=sort(score,'descend');
