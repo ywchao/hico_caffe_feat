@@ -1,15 +1,10 @@
 
 config;
 
-anno = load(anno_file);
-
 if ~exist(anno_sep_file,'file')
-    % convert annotation
-    % pathstr = fileparts(anno_sep_file);
-    % if ~exist(pathstr,'dir')
-    %     makedir(pathstr);
-    % end
     fprintf('generating anno_iccv_sep.mat (annotations for verbs and nouns) ... \n');
+
+    anno = load(anno_file);
     [anno_vb, anno_nn] = convert_anno_vn_iccv(anno);
     save(anno_sep_file,'anno_vb','anno_nn');
 

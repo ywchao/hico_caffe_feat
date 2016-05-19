@@ -160,7 +160,7 @@ for i = 1:num_class
             case 'single'
                 train_imdata(cnt).action = list(i);
             case 'multiple'
-                train_imdata(cnt).action = list(find(lbl_all(:,i)));  %#ok
+                train_imdata(cnt).action = list(find(lbl_all(:,i)));
         end
         
         % train_labels(cnt).label = i;
