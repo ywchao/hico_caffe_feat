@@ -38,7 +38,8 @@ coocc_data = load(coocc_file);
 param_tr.coocc_act = coocc_data.coocc_act;
 
 % set directory
-param_tr.score_dir_vn = [base_dir 'caches/svm_comb/mode_' feat_type '/vn_score/'];
+param_tr.score_dir_vb = [base_dir 'caches/svm_sep_vb/mode_' feat_type '/'];
+param_tr.score_dir_nn = [base_dir 'caches/svm_sep_nn/mode_' feat_type '/'];
 param_tr.score_dir_vo = [base_dir 'caches/svm_comb/mode_' feat_type '/vo_score_all_im/'];
 
 % set parfor option

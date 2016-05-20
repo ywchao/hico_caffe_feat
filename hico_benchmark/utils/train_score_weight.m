@@ -20,7 +20,10 @@ if exist(w_file,'file')
 end
 
 % load annotation
-anno = load(anno_file);
+anno     = load(anno_file);
+anno_sep = load(anno_sep_file);
+anno_vb  = anno_sep.anno_vb;
+anno_nn  = anno_sep.anno_nn;
 
 num_class = numel(anno.list_action);
 act_name  = cellfun(@(x,y)[x ' ' y], ...
@@ -49,7 +52,7 @@ if use_parfor
     % run rseed at the start of each iteration to ensure reproducibility
     parfor i = 1:num_class
         rseed;
-        [W{i}, ap_tr(i)] = train_score_weight_one(i, num_class, act_name{i}, anno, param_tr, w_cand_all);
+        [W{i}, ap_tr(i)] = train_score_weight_one(i, num_class, act_name{i}, anno, anno_vb, anno_nn, w_cand_all, param_tr);
     end
 else
     % use regular for loop
@@ -57,7 +60,7 @@ else
     % exact reproduction of the iccv result
     rseed;
     for i = 1:num_class
-        [W{i}, ap_tr(i)] = train_score_weight_one(i, num_class, act_name{i}, anno, param_tr, w_cand_all);
+        [W{i}, ap_tr(i)] = train_score_weight_one(i, num_class, act_name{i}, anno, anno_vb, anno_nn, w_cand_all, param_tr);
     end
 end
 fprintf('done. running time is %.2f sec.\n',toc);

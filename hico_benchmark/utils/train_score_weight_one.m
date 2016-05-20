@@ -1,8 +1,9 @@
-function [ W, ap_tr ] = train_score_weight_one( i, num_class, act_name, anno, param_tr, w_cand_all )
+function [ W, ap_tr ] = train_score_weight_one( i, num_class, act_name, anno, anno_vb, anno_nn, w_cand_all, param_tr )
 
 % get parameters
 score_type   = param_tr.score_type;
-score_dir_vn = param_tr.score_dir_vn;
+score_dir_vb = param_tr.score_dir_vb;
+score_dir_nn = param_tr.score_dir_nn;
 score_dir_vo = param_tr.score_dir_vo;
 coocc_act    = param_tr.coocc_act;
 flag_obj     = param_tr.flag_obj;
@@ -24,15 +25,30 @@ if (strcmp(score_type,'v+o') == 1 ...
         || strcmp(score_type,'vo+coocc+v+o') == 1 ...
         || strcmp(score_type,'vo+coocc+v') == 1 ...
         || strcmp(score_type,'vo+coocc+o') == 1)
+    % get im id for each vb and nn class
+    vb_id = anno_vb.ind(i);
+    nn_id = anno_nn.ind(i);
+    im_id_vb = find(anno_vb.anno_train(vb_id,:) ~= 0);
+    im_id_nn = find(anno_nn.anno_train(nn_id,:) ~= 0);
+    assert(all(ismember(find(ii), im_id_vb)));
+    assert(all(ismember(find(ii), im_id_nn)));
     % load vb and nn score
-    vn_file = sprintf('%sscore_%d.mat',score_dir_vn,i);
-    ld = load(vn_file);
-    score_vb = ld.res_tr.vb_score;
-    score_nn = ld.res_tr.nn_score;
-    assert(all(label' == ld.res_tr.label));
+    vb_file = sprintf('%strained_model/model_v_%d.mat',score_dir_vb,vb_id);
+    nn_file = sprintf('%strained_model/model_n_%d.mat',score_dir_nn,nn_id);
+    ld_vb = load(vb_file);
+    ld_nn = load(nn_file);
+    score_vb = ld_vb.res.vscore;
+    score_nn = ld_nn.res.vscore;
+    if ~isempty(score_vb)
+        score_vb = score_vb(ismember(im_id_vb, find(ii)));
+        assert(numel(score_vb) == numel(label));
+    end
+    if ~isempty(score_nn)
+        score_nn = score_nn(ismember(im_id_nn, find(ii)));
+        assert(numel(score_nn) == numel(label));
+    end
     % set is_cv_sep to false if not using cv for either vb or nn
-    is_cv_sep = ~(ld.res_tr.vb_is_cv == 0 || ld.res_tr.nn_is_cv == 0);
-    % TODO: score_vb/score_nn should be [] if not using cv
+    is_cv_sep = ~(isempty(score_vb) || isempty(score_nn));
 end
 if (strcmp(score_type,'v+vo') == 1 ...
         || strcmp(score_type,'o+vo') == 1 ...

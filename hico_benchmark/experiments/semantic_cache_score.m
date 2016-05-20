@@ -60,28 +60,15 @@ start_index = sid(batch_id);
 end_index   = eid(batch_id);
 
 % set output dir
-save_dir_vn = [base_dir 'caches/svm_comb/mode_' feat_type '/vn_score/'];
 save_dir_vo = [base_dir 'caches/svm_comb/mode_' feat_type '/vo_score_all_im/'];
-makedir(save_dir_vn);
 makedir(save_dir_vo);
-
-% load anno_vb and anno_nn
-anno_sep = load(anno_sep_file);
-anno_vb  = anno_sep.anno_vb;
-anno_nn  = anno_sep.anno_nn;
 
 parfor j = start_index:end_index
     fprintf('processing class %03d/%03d ...',j,len);
     tot_th = tic;
     
-    % cache vn scores
-    save_file = sprintf('%sscore_%d.mat', save_dir_vn, j);
-    if ~exist(save_file,'file')
-        res = cache_vn_score(anno, j, anno_vb, anno_nn, feat_type, feat_dir);
-        save_score(save_file, res);
-    end
-    
     % cache vo scores for all training/test images
+    % this step is required for using the classifiers of co-occurring classes
     save_file = sprintf('%sscore_%d.mat', save_dir_vo, j);
     if ~exist(save_file,'file')
         res = cache_vo_score_all_im(anno, j, feat_type, feat_dir);

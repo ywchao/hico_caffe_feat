@@ -5,7 +5,8 @@ config;
 % get parameters
 feat_type    = param_tr.feat_type;
 score_type   = param_tr.score_type;
-score_dir_vn = param_tr.score_dir_vn;
+score_dir_vb = param_tr.score_dir_vb;
+score_dir_nn = param_tr.score_dir_nn;
 score_dir_vo = param_tr.score_dir_vo;
 coocc_act    = param_tr.coocc_act;
 flag_obj     = param_tr.flag_obj;
@@ -21,7 +22,10 @@ if exist(res_file,'file')
 end
 
 % load annotation
-anno = load(anno_file);
+anno     = load(anno_file);
+anno_sep = load(anno_sep_file);
+anno_vb  = anno_sep.anno_vb;
+anno_nn  = anno_sep.anno_nn;
 
 num_class = numel(anno.list_action);
 
@@ -43,12 +47,24 @@ for i = 1:num_class
             || strcmp(score_type,'vo+coocc+v+o') == 1 ...
             || strcmp(score_type,'vo+coocc+v') == 1 ...
             || strcmp(score_type,'vo+coocc+o') == 1)
-        % load vb and nn score; never empty during test
-        file_vn = sprintf('%sscore_%d.mat',score_dir_vn,i);
-        ld = load(file_vn);
-        score_vb  = ld.res_ts.vb_score;
-        score_nn  = ld.res_ts.nn_score;
-        assert(all(label' == ld.res_ts.label));
+        % get im id for each vb and nn class
+        vb_id = anno_vb.ind(i);
+        nn_id = anno_nn.ind(i);
+        im_id_vb = find(anno_vb.anno_test(vb_id,:) ~= 0);
+        im_id_nn = find(anno_nn.anno_test(nn_id,:) ~= 0);
+        assert(all(ismember(find(ii), im_id_vb)));
+        assert(all(ismember(find(ii), im_id_nn)));
+        % load vb and nn score
+        vb_file = sprintf('%strain_test/verb_%d.mat',score_dir_vb,vb_id);
+        nn_file = sprintf('%strain_test/noun_%d.mat',score_dir_nn,nn_id);
+        ld_vb = load(vb_file);
+        ld_nn = load(nn_file);
+        score_vb = ld_vb.res.prob_estimates;
+        score_nn = ld_nn.res.prob_estimates;
+        score_vb = score_vb(ismember(im_id_vb, find(ii)));
+        score_nn = score_nn(ismember(im_id_nn, find(ii)));
+        assert(numel(score_vb) == numel(label));
+        assert(numel(score_nn) == numel(label));
     end
     if (strcmp(score_type,'v+vo') == 1 ...
             || strcmp(score_type,'o+vo') == 1 ...
