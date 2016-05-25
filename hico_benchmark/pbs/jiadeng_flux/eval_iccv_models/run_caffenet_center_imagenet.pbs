@@ -1,0 +1,16 @@
+#PBS -N eval_iccv_caffenet_center_imagenet \
+#PBS -M ywchao@umich.edu \
+#PBS -m a \
+
+#PBS -A jiadeng_flux
+#PBS -q flux
+#PBS -l qos=flux
+#PBS -l nodes=1:ppn=8
+#PBS -l pmem=4gb
+#PBS -l walltime=00:04:00:00
+#PBS -j eo
+#PBS -V
+
+#PBS -d /scratch/jiadeng_fluxg/ywchao/codes/hico_caffe_feat/hico_benchmark/
+
+./scripts/eval_iccv_models/run_caffenet_center_imagenet.sh
