@@ -1,0 +1,16 @@
+#PBS -N feat_iccv_caffenet_full_imagenet \
+#PBS -M ywchao@umich.edu \
+#PBS -m a \
+
+#PBS -A jiadeng_fluxg
+#PBS -q fluxg
+#PBS -l qos=flux
+#PBS -l nodes=1:ppn=1:gpus=1
+#PBS -l pmem=4gb
+#PBS -l walltime=00:03:00:00
+#PBS -j eo
+#PBS -V
+
+#PBS -d /scratch/jiadeng_fluxg/ywchao/codes/hico_caffe_feat/
+
+./scripts/feat_iccv_models/run_caffenet_full_imagenet.sh
